@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-jsx-i18n-tag-translate-replacer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "replace <translate>xxx</translate> to {t('xxx')} and <div translate>xxx</div> and plural form also, see ast example",
   "main": "index.js",
   "scripts": {
