@@ -33,7 +33,7 @@ module.exports = function (babel) {
             );
           }
           else {
-           if (path.parent && path.parent.type === 'ConditionalExpression') {
+           if (path.parent && (path.parent.type === 'ConditionalExpression' || path.parent.type === 'JSXExpressionContainer')) {
              translation = t.callExpression(
                t.identifier('t'),
                [t.stringLiteral(path.node.children[0].value)]
