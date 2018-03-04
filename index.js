@@ -7,7 +7,7 @@ module.exports = function (babel) {
       JSXElement (path) {
         const containsAttributes = path.node.openingElement.attributes.length;
         const containsAttr = attr => containsAttributes && path.node
-        	.openingElement.attributes.filter(a => a.name.name === attr).length;
+        	.openingElement.attributes.filter(a => a.name && a.name.name === attr).length;
         const readAttr = attr => path.node
         	.openingElement.attributes.filter(a => a.name.name === attr)[0];
         const isExpr = attr => ((path.node.openingElement
@@ -43,7 +43,7 @@ module.exports = function (babel) {
         
         else if (containsAttr('translate')) {
           path.node.openingElement.attributes.forEach((a, i) => {
-            if (a.name.name === 'translate') {
+            if (a.name && a.name.name === 'translate') {
               path.node.openingElement.attributes.splice(i, 1);
             }
           });
