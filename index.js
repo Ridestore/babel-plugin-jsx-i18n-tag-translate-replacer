@@ -14,6 +14,7 @@ module.exports = function (babel) {
         	.attributes.filter(a => a.name.name === attr))[0]).value.type === 'JSXExpressionContainer';
         if (path.node.openingElement.name.name === 'translate') {
           let translation = null;
+
           if (containsAttr('plural')) {
             if (!(containsAttr('n') && containsAttr('form1') && containsAttr('form5'))) { return; }
             const n = readAttr('n');
@@ -32,13 +33,22 @@ module.exports = function (babel) {
             );
           }
           else {
-           translation = t.jSXExpressionContainer(
-              t.callExpression(
-                t.identifier('t'),
-                [t.stringLiteral(path.node.children[0].value)]
-              )
-            );
+           if (path.parent && path.parent.type === 'ConditionalExpression') {
+             translation = t.callExpression(
+               t.identifier('t'),
+               [t.stringLiteral(path.node.children[0].value)]
+             );
+           }
+           else {
+             translation = t.jSXExpressionContainer(
+                t.callExpression(
+                  t.identifier('t'),
+                  [t.stringLiteral(path.node.children[0].value)]
+                )
+              );
+            }
           }
+
           path.replaceWith(translation);
         }
         
