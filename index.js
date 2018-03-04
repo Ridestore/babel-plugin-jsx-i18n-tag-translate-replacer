@@ -19,6 +19,7 @@ module.exports = function (babel) {
             const n = readAttr('n');
             const form1 = readAttr('form1');
             const form5 = readAttr('form5');
+
             translation = t.jSXExpressionContainer(
               t.callExpression(
                 t.identifier('p'),
@@ -28,7 +29,7 @@ module.exports = function (babel) {
                   form5.value,
                 ]
               )
-            )
+            );
           }
           else {
            translation = t.jSXExpressionContainer(
@@ -36,12 +37,13 @@ module.exports = function (babel) {
                 t.identifier('t'),
                 [t.stringLiteral(path.node.children[0].value)]
               )
-            ) 
+            );
           }
           path.replaceWith(translation);
         }
         
-        else if (containsAttr('translate')) {
+        else if (containsAttr('translate') && path.node.children.length) {
+          const valueIsExpr = path.node.children[0].type === 'JSXExpressionContainer';
           path.node.openingElement.attributes.forEach((a, i) => {
             if (a.name && a.name.name === 'translate') {
               path.node.openingElement.attributes.splice(i, 1);
@@ -51,7 +53,11 @@ module.exports = function (babel) {
           path.node.children[0] = t.jSXExpressionContainer(
             t.callExpression(
               t.identifier('t'),
-              [t.stringLiteral(path.node.children[0].value)]
+              [
+                valueIsExpr
+                  ? path.node.children[0].expression
+                  : t.stringLiteral(path.node.children[0].value)
+              ]
             )
           );
         }
